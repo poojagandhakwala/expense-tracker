@@ -51,7 +51,6 @@ export const selectBalances = createSelector(
 
       splitWith.forEach((memberId: number) => {
         {
-          console.log("member", balances[memberId]);
           balances[memberId] -= amountPerPerson;
         }
       });

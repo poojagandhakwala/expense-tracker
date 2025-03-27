@@ -1,8 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
-import Header from "./Header";
-import { useTab } from "./Context";
+import React, { useState, } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addExpense, deleteExpense } from "./redux/Expense/ExpenseSlice";
 import { selectBalances } from "./redux/Store";
 
 const ExpenseShareApp = () => {
@@ -16,61 +13,13 @@ const ExpenseShareApp = () => {
   const [currency, setCurrency] = useState<string>("USD");
   const members = useSelector((state: any) => state.member.memberList);
 
-  const dispatch = useDispatch();
-  const { theme } = useTab();
-
   const expenses = useSelector(
     (state: { expense: { expenseList: any[] } }) => state.expense.expenseList
   );
 
-  const [newExpense, setNewExpense] = useState({
-    description: "",
-    amount: "",
-    paidBy: 1,
-    category: "food",
-    splitWith: [1, 2, 3, 4],
-    date: new Date().toISOString().split("T")[0],
-  });
-  //   const [activeTab, setActiveTab] = useState("expenses");
-
-  // Categories with icons
-  const categories = [
-    { id: "food", name: "Food & Drinks", icon: "🍔" },
-    { id: "transport", name: "Transportation", icon: "🚗" },
-    { id: "accommodation", name: "Accommodation", icon: "🏠" },
-    { id: "entertainment", name: "Entertainment", icon: "🎭" },
-    { id: "shopping", name: "Shopping", icon: "🛍️" },
-    { id: "other", name: "Other", icon: "📦" },
-  ];
-
-  // // Handle member selection for splitting
-  // const handleMemberToggle = (memberId: number) => {
-  //   const currentSplitWith = [...newExpense.splitWith];
-  //   if (currentSplitWith.includes(memberId)) {
-  //     // Remove if already selected
-  //     setNewExpense({
-  //       ...newExpense,
-  //       splitWith: currentSplitWith.filter((id) => id !== memberId),
-  //     });
-  //   } else {
-  //     // Add if not selected
-  //     setNewExpense({
-  //       ...newExpense,
-  //       splitWith: [...currentSplitWith, memberId],
-  //     });
-  //   }
-  // };
-
-  // // Delete expense
-  // const handleDeleteExpense = (id) => {
-  //   dispatch(deleteExpense(id))
-  //   // setExpenses(expenses.filter((expense) => expense.id !== id));
-  // };
-
   // Generate settlement suggestions
   const generateSettlements = () => {
     const balances = useSelector(selectBalances);
-    console.log(balances);
     const settlements = [];
 
     // Create arrays of debtors and creditors
@@ -130,15 +79,11 @@ const ExpenseShareApp = () => {
     );
   };
 
-  // Get category details
-  const getCategory = (categoryId: string) => {
-    return categories.find((cat) => cat.id === categoryId) || categories[5]; // Default to "Other"
-  };
 
   return (
-    <div className={`app ${theme === "dark" ? "dark" : ""}`}>
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-xl font-semibold mb-4 text-gray-800">Settlement Suggestions</h2>
+    <div>
+      <div className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-md">
+        <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200 text-center">Settlement Suggestions</h2>
         {expenses.length === 0 ? (
           <p className="text-gray-500 text-center py-4">
             No expenses yet. Add expenses to see settlement suggestions.
@@ -154,19 +99,19 @@ const ExpenseShareApp = () => {
                 {generateSettlements().map((settlement, index) => (
                   <div
                     key={index}
-                    className="p-4 bg-indigo-50 border border-indigo-200 rounded-lg"
+                    className="p-4 bg-indigo-50 border border-indigo-200 dark:bg-indigo-900 dark:border-indigo-700 rounded-lg"
                   >
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center text-gray-800">
+                      <div className="flex items-center text-gray-800 dark:text-gray-200">
                         <span className="font-medium">
                           {getMemberName(settlement.from)}
                         </span>
-                        <span className="mx-2 text-gray-500">pays</span>
+                        <span className="mx-2 text-gray-500 dark:text-gray-200">pays</span>
                         <span className="font-medium">
                           {getMemberName(settlement.to)}
                         </span>
                       </div>
-                      <span className="font-bold text-indigo-600">
+                      <span className="font-bold text-indigo-600 dark:text-indigo-200">
                         {formatAmount(settlement.amount)}
                       </span>
                     </div>

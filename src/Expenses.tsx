@@ -1,12 +1,11 @@
-import  { useDeferredValue, useEffect, useState } from "react";
+import { useDeferredValue, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useTab } from "./Context";
 import { addExpense, deleteExpense } from "./redux/Expense/ExpenseSlice";
 
 const Expenses = () => {
   const expenses = useSelector((state: any) => state.expense.expenseList);
   const dispatch = useDispatch();
-  
+
   const currencies = [
     { code: "USD", symbol: "$" },
     { code: "EUR", symbol: "€" },
@@ -15,7 +14,7 @@ const Expenses = () => {
   ];
 
   const [currency, setCurrency] = useState<string>("USD");
-  const members= useSelector((state:any)=>state.member.memberList)
+  const members = useSelector((state: any) => state.member.memberList);
   const [newExpense, setNewExpense] = useState({
     description: "",
     amount: "",
@@ -35,14 +34,14 @@ const Expenses = () => {
 
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
-    const processedVal=name==="paidBy"?Number(value):value;
+    const processedVal = name === "paidBy" ? Number(value) : value;
     setNewExpense({ ...newExpense, [name]: processedVal });
   };
 
   const handleAddExpense = (e: any) => {
     e.preventDefault();
     if (!newExpense.description || !newExpense.amount) return;
-    
+
     const expenseToAdd = {
       id: Date.now(),
       // ...newExpense,
@@ -53,7 +52,7 @@ const Expenses = () => {
       amount: parseFloat(newExpense.amount),
       date: newExpense.date || new Date().toISOString().split("T")[0],
     };
-    console.log("ex=",expenseToAdd)
+    console.log("ex=", expenseToAdd);
     dispatch(addExpense(expenseToAdd));
     // setExpenses([...expenses, expenseToAdd]);
 
@@ -92,16 +91,16 @@ const Expenses = () => {
     return currencies.find((c) => c.code === currency)?.symbol || "$";
   };
 
-   const formatAmount = (amount:number) => {
+  const formatAmount = (amount: number) => {
     return `${getCurrencySymbol()}${amount.toFixed(2)}`;
   };
 
-  const getMemberName = (id:number) => {
-    return members.find((member:any) => member.id === id)?.name || "Unknown";
+  const getMemberName = (id: number) => {
+    return members.find((member: any) => member.id === id)?.name || "Unknown";
   };
 
-  const getCategory = (categoryId:string) => {
-    return categories.find(cat => cat.id === categoryId) || categories[5]; 
+  const getCategory = (categoryId: string) => {
+    return categories.find((cat) => cat.id === categoryId) || categories[5];
   };
 
   // useEffect(()=>{
@@ -111,16 +110,17 @@ const Expenses = () => {
   //   }
   // },[])
 
-
   return (
-    <div className={`bg-primar`}>
+    <div>
       <div>
-        <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-          <h2 className="text-xl font-semibold mb-4 text-gray-800">Add New Expense</h2>
+        <div className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-md mb-6">
+          <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200 text-center">
+            Add New Expense
+          </h2>
           <form onSubmit={handleAddExpense} className="!text-black">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 !justify-start">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
                   Description
                 </label>
                 <input
@@ -128,17 +128,17 @@ const Expenses = () => {
                   name="description"
                   value={newExpense.description}
                   onChange={handleInputChange}
-                className="w-full p-2 !border !border-black rounded-md"
+                  className="w-full p-2 !border !border-black focus-visible:dark:outline-none rounded-md dark:text-gray-200"
                   placeholder="What was it for?"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-200 ">
                   Amount
                 </label>
                 <div className="relative">
-                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500 dark:text-gray-200 ">
                     {getCurrencySymbol()}
                   </span>
                   <input
@@ -146,7 +146,7 @@ const Expenses = () => {
                     name="amount"
                     value={newExpense.amount}
                     onChange={handleInputChange}
-                    className="w-full p-2 pl-7 !border !border-black rounded-md"
+                    className="w-full p-2 pl-7 !border !border-black focus-visible:dark:outline-none rounded-md dark:text-gray-200"
                     placeholder="0.00"
                     step="0.01"
                     min="0"
@@ -155,16 +155,16 @@ const Expenses = () => {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-200 ">
                   Paid By
                 </label>
                 <select
                   name="paidBy"
                   value={newExpense.paidBy}
                   onChange={handleInputChange}
-                  className="w-full p-2 !border !border-black rounded-md"
+                  className="w-full p-2 !border !border-black focus-visible:dark:outline-none rounded-md dark:text-gray-200 dark:bg-gray-700"
                 >
-                  {members.map((member:any) => (
+                  {members.map((member: any) => (
                     <option key={member.id} value={member.id}>
                       {member.name}
                     </option>
@@ -172,14 +172,14 @@ const Expenses = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-200 ">
                   Category
                 </label>
                 <select
                   name="category"
                   value={newExpense.category}
                   onChange={handleInputChange}
-                  className="w-full p-2 !border !border-black rounded-md"
+                  className="w-full p-2 !border !border-black focus-visible:dark:outline-none rounded-md dark:text-gray-200 dark:bg-gray-700"
                 >
                   {categories.map((category) => (
                     <option key={category.id} value={category.id}>
@@ -189,7 +189,7 @@ const Expenses = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-200 ">
                   Date
                 </label>
                 <input
@@ -197,17 +197,17 @@ const Expenses = () => {
                   name="date"
                   value={newExpense.date}
                   onChange={handleInputChange}
-                  className="w-full p-2 !border !border-black rounded-md"
+                  className="w-full p-2 !border !border-black focus-visible:dark:outline-none rounded-md dark:text-gray-200"
                 />
               </div>
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2 bg-white dark:bg-gray-700 ">
                 Split With
               </label>
               <div className="flex flex-wrap gap-2">
-                {members.map((member:any) => (
+                {members.map((member: any) => (
                   <button
                     key={member.id}
                     type="button"
@@ -235,8 +235,10 @@ const Expenses = () => {
         </div>
 
         {/* Expenses List */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold mb-4">Expenses</h2>
+        <div className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-md">
+          <h2 className="text-xl font-semibold mb-4  dark:text-gray-100">
+            Expenses
+          </h2>
           {expenses.length === 0 ? (
             <p className="text-gray-500 text-center py-4">
               No expenses yet. Add your first expense above!
@@ -244,31 +246,31 @@ const Expenses = () => {
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50">
+                <thead className="bg-gray-50 dark:bg-gray-600 ">
                   <tr>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-100 uppercase tracking-wider">
                       Description
                     </th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-100 uppercase tracking-wider">
                       Amount
                     </th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-100 uppercase tracking-wider">
                       Paid By
                     </th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-100 uppercase tracking-wider">
                       Category
                     </th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-100 uppercase tracking-wider">
                       Date
                     </th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-100 uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200 !text-black">
-                  {expenses.map((expense:any) => (
-                    <tr key={expense.id}>
+                <tbody className="divide-y divide-gray-200 !text-black dark:text-gray-200">
+                  {expenses.map((expense: any) => (
+                    <tr key={expense.id} className="dark:text-gray-200">
                       <td className="px-4 py-3 whitespace-nowrap">
                         {expense.description}
                       </td>
@@ -300,7 +302,7 @@ const Expenses = () => {
                     </tr>
                   ))}
                 </tbody>
-              </table>
+              </table>             
             </div>
           )}
         </div>
